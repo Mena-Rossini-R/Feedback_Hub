@@ -1,0 +1,22 @@
+// bulk-upload.component.scss
+.page-wrapper { max-width:900px; }
+.upload-card { margin-bottom:20px; padding:24px; }
+.drop-zone {
+  border:2.5px dashed #C4D0E4; border-radius:12px; padding:48px 24px; text-align:center;
+  cursor:pointer; transition:all .2s; background:#F8FAFD;
+  &.drag-over { border-color:#2A70B2; background:#EAF2FE; }
+  &.has-file   { border-color:#1A8240; background:#F0FBF4; border-style:solid; }
+  .drop-icon { font-size:56px; width:56px; height:56px; color:#C4D0E4; margin-bottom:12px; }
+  .drop-title { font-size:16px; font-weight:600; color:#0E1630; margin-bottom:6px;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    &.has-file { color:#1A8240; } mat-icon { color:#1A8240; } }
+  .drop-sub { font-size:12px; color:#9BA8BB; margin-bottom:16px; }
+  .browse-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 20px; border-radius:8px;
+    background:#2A70B2; color:#fff; font-weight:600; cursor:pointer; font-size:14px; }
+}
+.upload-actions { padding-top:16px;
+  .action-btns { display:flex; gap:12px; justify-content:flex-end; }
+}
+.results-card { mat-card-title { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:600; } }
+.table-container { overflow-x:auto; }
+.full-table { width:100%; }
