@@ -1,0 +1,81 @@
+<!-- bulk-upload.component.html -->
+<div class="page-wrapper">
+  <div class="page-header">
+    <div><h2>Bulk Upload</h2><p>Import student performance data via Excel or CSV file</p></div>
+  </div>
+
+  <mat-card class="upload-card">
+
+    <!-- Drop Zone -->
+    <div class="drop-zone" [class.drag-over]="dragOver" [class.has-file]="selectedFile"
+         (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+      <mat-icon class="drop-icon">cloud_upload</mat-icon>
+      <div class="drop-title" *ngIf="!selectedFile">Drag & drop your file here</div>
+      <div class="drop-title has-file" *ngIf="selectedFile">
+        <mat-icon>insert_drive_file</mat-icon> {{ selectedFile.name }} ({{ formatSize(selectedFile.size) }})
+      </div>
+      <p class="drop-sub">Supported: .xlsx  .xls  .csv  |  Max: 10 MB</p>
+      <div class="drop-actions">
+        <label mat-raised-button color="primary" class="browse-btn">
+          <mat-icon>folder_open</mat-icon> Browse Files
+          <input type="file" hidden accept=".xlsx,.xls,.csv" (change)="onFileSelect($event)">
+        </label>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="upload-actions" *ngIf="selectedFile">
+      <mat-progress-bar mode="indeterminate" *ngIf="uploading" style="margin-bottom:12px"></mat-progress-bar>
+      <div class="action-btns">
+        <button mat-stroked-button (click)="cancel()" [disabled]="uploading">Cancel</button>
+        <button mat-raised-button color="primary" (click)="upload()" [disabled]="uploading">
+          <mat-spinner diameter="18" *ngIf="uploading" style="display:inline-block;margin-right:6px"></mat-spinner>
+          <mat-icon *ngIf="!uploading">upload</mat-icon>
+          {{ uploading ? 'Uploading...' : 'Confirm Import' }}
+        </button>
+      </div>
+    </div>
+
+  </mat-card>
+
+  <!-- Results Preview -->
+  <mat-card class="results-card" *ngIf="uploadedScores.length">
+    <mat-card-header>
+      <mat-card-title><mat-icon>check_circle</mat-icon> Import Results — {{ uploadedScores.length }} records</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="uploadedScores" class="full-table">
+          <ng-container matColumnDef="traineeName">
+            <th mat-header-cell *matHeaderCellDef>Student</th>
+            <td mat-cell *matCellDef="let r"><strong>{{ r.traineeName }}</strong></td>
+          </ng-container>
+          <ng-container matColumnDef="assignmentName">
+            <th mat-header-cell *matHeaderCellDef>Assignment</th>
+            <td mat-cell *matCellDef="let r">{{ r.assignmentName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let r">{{ r.category }}</td>
+          </ng-container>
+          <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef>Score</th>
+            <td mat-cell *matCellDef="let r">
+              <span [ngClass]="getScoreClass(r.score)">{{ r.score }}%</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="grade">
+            <th mat-header-cell *matHeaderCellDef>Grade</th>
+            <td mat-cell *matCellDef="let r">{{ r.grade || '—' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="submittedDate">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let r">{{ r.submittedDate | date:'mediumDate' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
